@@ -1,12 +1,50 @@
 <?php
 
-print("SALUT");
+print("Let's search this flag!<br/>");
+$hidden_flag = new hidden_flag();
+$hidden_flag->run();
 //$search = new search();
 //$search->run();
 
+Class hidden_flag {
+	const URL = "http://192.168.1.35/";
+	const FOLDER = ".hidden/";
+	const FULL_URL = self::URL . self::FOLDER;
+	const NBR_OF_FILES = 26;
+
+	private string $tree;
+	private int $i;
+
+	/*
+	**	Get the full directory tree
+	*/
+
+	public function __Construct() {
+		print("Searching in " . self::FULL_URL . "<br/>");
+		$this->tree = file_get_contents(self::FULL_URL);
+		//print_r($this->tree);
+	}
+
+	public function run() {
+		$i = 0;
+		$read_me = file_get_contents(self::FULL_URL."README");
+		print("<br/>salut ".$read_me."<br/>");
+		preg_match_all('#<a href="(.*)">(.*)</a>#', $this->tree, $rep);
+		print(split('<', $rep[0][1]));
+		$url = self::FULL_URL.split('<', split('>', $rep[0][1])[1])[0];
+		print_r($url);
+		while ($i < self::NBR_OF_FILES) {
+
+			//print("<br/>i = " . $i . " / url = " . file_get_contents(self::FULL_URL));
+			$i++;
+		}
+	}
+
+}
+
 Class search {
 
-	const ROOT = "http://192.168.1.16/.hidden/";
+	const ROOT = "http://192.168.1.35/.hidden/";
 	const NB_PAR_PAGE = 26;
 
 	/**
@@ -64,7 +102,7 @@ Class search {
 				while ($k < self::NB_PAR_PAGE) {
 					$this->way[2] = $this->get_way(2, $k);
 					if (is_numeric(file_get_contents(self::ROOT.implode("", $this->way).'README')[0])) {
-						echo "flag : ".file_get_contents(self::ROOT.implode("", $this->way).'README');
+						echo "flag : ".file_get_contents(self::ROOT.implode("", $this->way).'README'). "in dir ".$i." in file ".$j."in flie".$k;
 						return (0);
 					}
 					$k++;
